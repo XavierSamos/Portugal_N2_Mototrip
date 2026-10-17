@@ -21,7 +21,7 @@ function initMap() {
   }
 
   const map = L.map('map', { scrollWheelZoom: true }).setView([39.3, -7.0], 6);
-  window.map = map;
+  window.n2Map = map;
 
   L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Tiles &copy; Esri &mdash; Esri, HERE, Garmin, FAO, NOAA, USGS, &copy; OpenStreetMap contributors',
@@ -58,7 +58,7 @@ function setMapMode(mode) {
   document.getElementById('map-stage-controls').classList.toggle('hidden', mode !== 'stage');
   document.getElementById('map-stamp-controls').classList.toggle('hidden', mode !== 'stamps');
   renderMapView();
-  if (window.map) setTimeout(() => window.map.invalidateSize(), 100);
+  if (window.n2Map) setTimeout(() => window.n2Map.invalidateSize(), 100);
 }
 
 function setMapStage(day) {
@@ -154,7 +154,7 @@ function addSightMarkers() {
 
 function renderMapView() {
   renderMapInfo();
-  if (!window.map || !routeLayer) return;
+  if (!window.n2Map || !routeLayer) return;
   routeLayer.clearLayers();
   markerLayer.clearLayers();
   Object.keys(stampMarkers).forEach(k => delete stampMarkers[k]);
@@ -216,7 +216,7 @@ function renderMapView() {
 
   addSightMarkers();
 
-  if (bounds.length) window.map.fitBounds(L.latLngBounds(bounds), { padding: [30, 30], maxZoom: 11 });
+  if (bounds.length) window.n2Map.fitBounds(L.latLngBounds(bounds), { padding: [30, 30], maxZoom: 11 });
 }
 
 function renderMapInfo() {

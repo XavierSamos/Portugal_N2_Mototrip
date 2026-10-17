@@ -7,3 +7,12 @@ Planificador estático de la expedición en solitario en Honda CRF1100L Africa T
 - 8 pestañas: mapa, itinerario, pasaporte N2 (35 sellos), lugares, presupuesto, campings, tramos y moto, equipaje.
 - localStorage: `n2_theme`, `n2_stamps`, `n2_packing`, `n2_favorites`.
 - Los datos viven en `js/data/` (stages, stamps, sights, campings, passes).
+
+## Novedades
+- **Pestaña "Hoy"**: etapa del día (se abre sola durante el viaje), amanecer/anochecer calculados, control de repostaje (alerta a 140 y 180 km), sellos del día, enlaces de tiempo y botón "Marcar etapa como completada".
+- **Modo sin conexión (PWA)**: tras abrir la web una vez con internet funciona sin cobertura y se puede instalar en el móvil. Botón "Guardar mapa para usar sin conexión" (zoom 6–10, ~275 teselas).
+- **Previsión** (Open-Meteo) para la pernocta, disponible desde 15 días antes de cada etapa.
+- localStorage nuevo: `n2_done`, `n2_today`, `n2_weather`.
+
+## Al desplegar cambios
+Sube `VERSION` en `sw.js` para que los móviles renueven la caché.

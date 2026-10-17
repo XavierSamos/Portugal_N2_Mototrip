@@ -4,7 +4,10 @@ const STORAGE_KEYS = {
   theme: 'n2_theme',
   stamps: 'n2_stamps',
   packing: 'n2_packing',
-  favorites: 'n2_favorites'
+  favorites: 'n2_favorites',
+  done: 'n2_done',       // etapas completadas
+  today: 'n2_today',     // km desde el último repostaje
+  weather: 'n2_weather'  // caché de previsión
 };
 
 // localStorage protegido (modo privado, file:// con almacenamiento bloqueado, etc.)
@@ -44,8 +47,8 @@ function switchTab(tabId) {
   const btn = document.getElementById('tab-' + tabId);
   if (view) view.classList.remove('hidden');
   if (btn) { btn.classList.add('active'); btn.setAttribute('aria-selected', 'true'); }
-  if (tabId === 'map' && window.map) {
-    setTimeout(() => window.map.invalidateSize(), 150);
+  if (tabId === 'map' && window.n2Map) {
+    setTimeout(() => window.n2Map.invalidateSize(), 150);
   }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }

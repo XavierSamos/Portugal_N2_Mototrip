@@ -9,6 +9,12 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#1d4ed8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Portugal N2">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
 </head>
 <body class="light-theme font-sans antialiased p-3 md:p-8">
 
@@ -27,6 +33,8 @@
         <span class="tag tag-blue">9,5 días · 10 etapas</span>
         <span class="tag tag-green">~2.650 km · 0% autovía a la ida</span>
         <span class="tag tag-amber" id="header-stamps-badge">🛂 0/35 sellos</span>
+        <span class="tag tag-red hidden" id="offline-badge">📴 Sin conexión</span>
+        <button onclick="installApp()" id="btn-install" class="btn hidden no-print">📲 Instalar app</button>
         <button onclick="toggleTheme()" id="theme-toggle-btn" class="btn no-print" aria-label="Cambiar tema">☀️ <span>Modo claro</span></button>
         <button onclick="window.print()" class="btn no-print" title="Imprimir roadbook para la bolsa sobredepósito">🖨️ <span>Roadbook</span></button>
       </div>
@@ -35,6 +43,7 @@
     <!-- ===== PESTAÑAS ===== -->
     <nav class="panel p-2 flex items-center gap-1.5 text-xs font-bold overflow-x-auto whitespace-nowrap no-print" role="tablist">
       <button onclick="switchTab('map')" id="tab-map" class="tab-btn active px-3.5 py-2.5 rounded-xl shrink-0" role="tab">📍 Mapa y Resumen</button>
+      <button onclick="switchTab('today')" id="tab-today" class="tab-btn px-3.5 py-2.5 rounded-xl shrink-0" role="tab">📆 Hoy</button>
       <button onclick="switchTab('itinerary')" id="tab-itinerary" class="tab-btn px-3.5 py-2.5 rounded-xl shrink-0" role="tab">📅 Itinerario</button>
       <button onclick="switchTab('passport')" id="tab-passport" class="tab-btn px-3.5 py-2.5 rounded-xl shrink-0" role="tab">🛂 Pasaporte N2</button>
       <button onclick="switchTab('sights')" id="tab-sights" class="tab-btn px-3.5 py-2.5 rounded-xl shrink-0" role="tab">🏛️ Lugares</button>
@@ -80,6 +89,7 @@
 
           <div id="map" role="application" aria-label="Mapa interactivo de la ruta"></div>
           <p class="text-[11px] t-subtle">Trazado orientativo por los waypoints de cada etapa. Para navegar usa el enlace de Google Maps de cada día.</p>
+          <div id="offline-box" class="inset p-3 no-print"><!-- Injected via JavaScript --></div>
         </div>
 
         <aside class="space-y-4">
@@ -93,8 +103,8 @@
           <div class="panel p-5 space-y-3">
             <h3 class="font-bold t-main">🌤️ Luz y clima en diciembre</h3>
             <div class="grid grid-cols-2 gap-2 text-xs">
-              <div class="inset p-3"><span class="t-subtle block">Sol en Portugal (UTC+0)</span><strong class="t-main text-sm">07:40 – 17:15</strong><span class="t-amber block text-[11px] font-semibold">Tienda montada 16:45</span></div>
-              <div class="inset p-3"><span class="t-subtle block">Sol en Andalucía (UTC+1)</span><strong class="t-main text-sm">08:15 – 18:05</strong><span class="t-subtle block text-[11px]">+1 h respecto a PT</span></div>
+              <div class="inset p-3"><span class="t-subtle block">Sol en Portugal (UTC+0)</span><strong class="t-main text-sm">07:35 – 16:59…17:16</strong><span class="t-amber block text-[11px] font-semibold">Norte anochece antes · tienda 16:30–16:45</span></div>
+              <div class="inset p-3"><span class="t-subtle block">Sol en Andalucía (UTC+1)</span><strong class="t-main text-sm">08:17 – 18:04</strong><span class="t-subtle block text-[11px]">+1 h respecto a PT</span></div>
               <div class="inset p-3"><span class="t-subtle block">Alentejo / Algarve</span><strong class="t-green text-sm">8 °C – 17 °C</strong><span class="t-subtle block text-[11px]">Seco y templado</span></div>
               <div class="inset p-3"><span class="t-subtle block">Serra da Estrela</span><strong class="t-red text-sm">−4 °C – 6 °C</strong><span class="t-subtle block text-[11px]">Nieve posible</span></div>
             </div>
@@ -103,12 +113,17 @@
       </div>
     </section>
 
+    <!-- ===== TAB: HOY ===== -->
+    <section id="view-today" class="tab-content hidden space-y-5">
+      <div id="today-content" class="space-y-5"><!-- Injected via JavaScript --></div>
+    </section>
+
     <!-- ===== TAB 2: ITINERARIO ===== -->
     <section id="view-itinerary" class="tab-content hidden space-y-5">
       <div class="panel p-5 space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 class="font-bold text-lg t-main">📅 Cronograma maestro · 10 etapas</h2>
+            <h2 class="font-bold text-lg t-main">📅 Cronograma maestro · 10 etapas <span id="stage-progress" class="tag tag-green ml-1 align-middle">✅ 0/10 etapas</span></h2>
             <p class="text-xs t-muted">Cada jornada calculada para montar la tienda antes de las 16:45 (sol hasta las 17:15 en Portugal).</p>
           </div>
           <div class="flex flex-wrap gap-1.5" id="itinerary-filters">
@@ -373,6 +388,7 @@
   <script src="js/data/campings.js"></script>
   <script src="js/data/passes.js"></script>
   <!-- Lógica -->
+  <script src="js/sun.js"></script>
   <script src="js/core.js"></script>
   <script src="js/map.js"></script>
   <script src="js/itinerary.js"></script>
@@ -382,6 +398,8 @@
   <script src="js/passes.js"></script>
   <script src="js/budget.js"></script>
   <script src="js/packing.js"></script>
+  <script src="js/today.js"></script>
+  <script src="js/offline.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

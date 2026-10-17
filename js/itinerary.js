@@ -23,6 +23,7 @@ function renderItineraryCards() {
   const list = stagesData.filter(s => currentPhaseFilter === 'all' || s.phase === currentPhaseFilter);
   container.innerHTML = list.map(s => {
     const ph = phaseInfo[s.phase];
+    const doneNow = getDoneStages().includes(s.day);
     const sights = (s.sightIds || []).map(id => sightsData.find(x => x.id === id)).filter(Boolean);
     const sightChips = sights.length ? `
       <div class="flex flex-wrap gap-1.5 pt-2 border-t divider no-print">
@@ -36,6 +37,7 @@ function renderItineraryCards() {
               <span class="font-black t-accent text-sm">DÍA ${s.day}</span>
               <span class="tag tag-slate">${escapeHtml(s.dateShort)}</span>
               <span class="tag ${ph.tag}">${ph.short}</span>
+              ${doneNow ? '<span class="tag tag-green">✅ Completada</span>' : ''}
             </div>
             <div class="flex items-center gap-1.5">
               <span class="tag tag-slate font-mono">${formatNum(s.km)} km</span>
@@ -56,6 +58,7 @@ function renderItineraryCards() {
           <a href="${s.gmaps}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="btn btn-primary">🗺️ Ruta en Google Maps</a>
           <div class="flex gap-2">
             <button type="button" class="btn" onclick="event.stopPropagation(); showStageOnMap(${s.day})">📍 En el mapa</button>
+            <button type="button" class="btn" onclick="event.stopPropagation(); toggleStageDone(${s.day})" title="Marcar etapa como completada">${doneNow ? '✅' : '☐'}</button>
             <span class="btn btn-ghost">📋 Cronograma ➔</span>
           </div>
         </div>
