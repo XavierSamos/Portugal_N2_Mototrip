@@ -2,7 +2,7 @@
 // Orientativo: nombres de pueblos y vías de enlace a comprobar en Google Maps; no están verificados sobre el terreno.
 
 const planBData = {
-  0: { bail: 'San Pedro Alcántara o Marbella: hostales si llegas tarde o hay niebla en el Puerto del Madroño.',
+  0: { bail: 'Duerme en Ronda (Camping El Sur) si hay niebla, hielo o cansancio antes del tramo nocturno a Grazalema; también hostales en San Pedro o Marbella.',
        shortcut: 'Alternativa por Ardales (A-357 / A-367) si la costa está atascada: menos curvas buenas, pero sin tráfico urbano.',
        weather: 'Con lluvia fuerte o niebla, duerme en San Pedro y sube a Ronda por la mañana.' },
   1: { bail: 'Zahara de la Sierra o Arcos de la Frontera (hostales y casas rurales).',

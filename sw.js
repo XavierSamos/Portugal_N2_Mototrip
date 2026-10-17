@@ -4,7 +4,7 @@
 // - Teselas del mapa: caché primero, con límite de tamaño.
 // Sube VERSION al desplegar cambios para forzar la renovación de la caché.
 
-const VERSION = 'v3';
+const VERSION = 'v4';
 const APP_CACHE = `n2-app-${VERSION}`;
 const CDN_CACHE = `n2-cdn-${VERSION}`;
 const TILE_CACHE = 'n2-tiles-v1';
