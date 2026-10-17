@@ -11,28 +11,30 @@ const phaseInfo = {
 const stagesData = [
   {
     day: 0, date: 'Viernes 4 Diciembre 2026', dateShort: 'Vie 4 Dic', phase: 'sierras',
-    title: 'Málaga ➔ San Pedro ➔ Serranía de Ronda (A-397)',
-    km: 130, time: '2,5 h', roads: 'A-7 (enlace) · A-397',
-    cities: ['Málaga', 'San Pedro Alcántara', 'Ronda'],
+    title: 'Málaga ➔ San Pedro ➔ Serranía de Ronda (A-397) ➔ Grazalema',
+    km: 165, time: '3,5 h', roads: 'A-7 (enlace) · A-397',
+    cities: ['Málaga', 'San Pedro Alcántara', 'Ronda', 'Grazalema'],
     waypoints: [
       { name: 'Málaga', lat: 36.7213, lng: -4.4214 },
       { name: 'Marbella', lat: 36.5101, lng: -4.8825 },
       { name: 'San Pedro Alcántara', lat: 36.4880, lng: -4.9910 },
       { name: 'Puerto del Madroño (A-397)', lat: 36.5990, lng: -5.0610 },
-      { name: 'Ronda', lat: 36.7423, lng: -5.1671 }
+      { name: 'Ronda', lat: 36.7423, lng: -5.1671 },
+      { name: 'Grazalema', lat: 36.7590, lng: -5.3670 }
     ],
-    night: { name: 'Camping El Sur (Ronda)', type: 'camping', campingId: 'ronda', lat: 36.7270, lng: -5.1730 },
+    night: { name: 'Camping Tajo Rodillo (Grazalema) · confirmar', type: 'camping', campingId: 'tajorodillo', lat: 36.7586, lng: -5.3739 },
     maxAlt: 1050, altPass: 'Puerto del Madroño · A-397 (~1.050 m)',
     stamps: 0, timezone: 'España (UTC+1) · Puesta de sol 18:04',
     lunch: 'Comida en casa antes de cargar; tapa rápida en Ronda al llegar',
-    summary: 'Salida de tarde tras el trabajo. Enlace corto por la costa y subida por la A-397: 40 km de curvas enlazadas con firme excelente desde San Pedro hasta la Serranía. Montaje de tienda en Ronda con la última luz.',
-    gmaps: 'https://www.google.com/maps/dir/Malaga/San+Pedro+Alcantara/Ronda',
+    summary: 'Salida a las 16:00. Enlace corto por la costa y subida por la A-397: 40 km de curvas enlazadas desde San Pedro hasta la Serranía. Anochece en Ronda (~18:05) y sigues ~1 h de noche hasta Grazalema, que te deja el Puerto de las Palomas a primera hora del Día 1. Plan B: dormir en Ronda.',
+    gmaps: 'https://www.google.com/maps/dir/Malaga/San+Pedro+Alcantara/Ronda/Grazalema',
     timeline: [
-      { time: '13:30 - 14:30', act: 'Carga final de la Africa Twin: maletas, saco, tienda y kit tubeless. Presiones en frío (2,25 / 2,50 bar con carga).' },
-      { time: '14:30 - 15:30', act: 'Enlace por la costa hasta San Pedro Alcántara evitando la hora punta de Marbella.' },
-      { time: '15:30 - 16:30', act: '🏍️ A-397 San Pedro ➔ Ronda: el primer gran tramo de curvas del viaje. Modo Tour, ritmo fluido.' },
-      { time: '16:45', act: '⛺ Llegada al Camping El Sur: montaje de la tienda con luz (sol hasta ~18:05 en España).' },
-      { time: '19:30', act: 'Paseo al Puente Nuevo y cena de rabo de toro en Ronda.' }
+      { time: '15:15 - 16:00', act: 'Carga final de la Africa Twin: maletas, saco, tienda y kit tubeless. Presiones en frío (2,25 / 2,50 bar con carga). Salida a las 16:00.' },
+      { time: '16:00 - 17:00', act: 'Enlace por la costa hasta San Pedro Alcántara (sin hora punta de Marbella si sales ya).' },
+      { time: '17:00 - 18:10', act: '🏍️ A-397 San Pedro ➔ Ronda con las últimas luces: el primer gran tramo de curvas del viaje. Anochece ~18:05.' },
+      { time: '18:15', act: '⛽ Parada en Ronda: gasolina, café y chaqueta térmica antes del tramo nocturno.' },
+      { time: '18:30 - 19:30', act: '🌙 ~1 h de noche hasta Grazalema por carretera de montaña. Atención a niebla, hielo en sombras y fauna; ritmo bajo.' },
+      { time: '19:30', act: '⛺ Montaje de la tienda en Tajo Rodillo (llama antes para confirmar apertura y tienda). Si no, vuelve a Ronda: Camping El Sur.' }
     ],
     sightIds: [], passIds: ['a397']
   },
@@ -58,8 +60,8 @@ const stagesData = [
     summary: 'La gran jornada de puertos andaluces: Grazalema, la subida en zigzag al Puerto de las Palomas y la bajada vertiginosa a Zahara con el embalse a tus pies. Enlace por la campiña y llegada a la Sierra de Aracena entre castaños.',
     gmaps: 'https://www.google.com/maps/dir/Ronda/Grazalema/Puerto+de+las+Palomas/Zahara+de+la+Sierra/Arcos+de+la+Frontera/Aracena',
     timeline: [
-      { time: '08:30 - 08:45', act: 'Desmontaje de la tienda (escarcha probable). Café y salida a las 08:45 con la primera luz útil.' },
-      { time: '08:45 - 10:00', act: '🏍️ A-372 hasta Grazalema y subida al Puerto de las Palomas (1.357 m). Modo Gravel si hay humedad o hielo en sombras.' },
+      { time: '08:30 - 08:45', act: 'Desmontaje de la tienda en Grazalema (escarcha probable). Café y salida a las 08:45 con la primera luz útil.' },
+      { time: '08:45 - 10:00', act: '🏍️ Puerto de las Palomas (1.357 m) con luz de día y a un paso del camping. Modo Gravel si hay humedad o hielo en sombras.' },
       { time: '10:00 - 10:30', act: '📸 Mirador de Zahara y café en el pueblo.' },
       { time: '10:30 - 12:00', act: 'Bajada hacia Arcos de la Frontera por la A-372.' },
       { time: '12:00', act: '⛽ Repostaje en Arcos (km ~110). Siguiente repostaje obligatorio antes del km 290.' },

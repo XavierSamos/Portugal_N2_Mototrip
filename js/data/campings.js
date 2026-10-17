@@ -4,12 +4,18 @@
 // pref: 1 = 1ª preferencia, 2 = alternativa, 0 = descartado. Precios en € por noche (orientativos).
 
 const campingsData = [
-  { id: 'ronda', name: 'Camping El Sur (Ronda)', zone: 'Andalucía · Día 0', day: 0, pref: 1, status: 'verified',
+  { id: 'ronda', name: 'Camping El Sur (Ronda)', zone: 'Andalucía · Día 0', day: 0, pref: 2, status: 'verified',
     open: 'Todo el año (Alan Rogers)', priceMin: 18, priceMax: 24, priceDetail: 'Orientativo, sin tarifa confirmada',
     lat: 36.7270, lng: -5.1730,
     features: ['Admite tiendas (parcelas de tienda en la parte alta)', 'A 2 km del centro de Ronda', 'Vistas a la Serranía'],
     src: 'Alan Rogers: abierto todo el año, parcelas para tienda.',
-    note: 'Pernocta del Día 0.' },
+    note: 'Plan B del Día 0 si no quieres seguir de noche hasta Grazalema.' },
+  { id: 'tajorodillo', name: 'Camping Tajo Rodillo (Grazalema)', zone: 'Sierra de Grazalema · Día 0', day: 0, pref: 1, status: 'check',
+    open: 'Temporada no indicada (un foro de 2015 sugiere cierre invernal): confirmar', priceMin: 20, priceMax: 25, priceDetail: 'Pitchup: 20 € parcela de tienda · 25 € caravana/autocaravana (2 adultos)',
+    lat: 36.7586, lng: -5.3739,
+    features: ['Junto a Grazalema, a ~19 km de Ronda según PiNCAMP', 'Piscina exterior y bungalós', 'Pitchup se contradice sobre admitir tiendas'],
+    src: 'Pitchup y PiNCAMP. Sin fechas de apertura publicadas.',
+    note: 'Pernocta del Día 0 propuesta. Llama antes de salir. Si no abre o no admite tienda: Camping El Sur en Ronda.' },
   { id: 'aracena', name: 'Camping El Madroñal (Fuenteheridos)', zone: 'Sierra de Aracena · Día 1', day: 1, pref: 1, status: 'verified',
     open: 'Todo el año (Alan Rogers)', priceMin: 15, priceMax: 20, priceDetail: 'Orientativo, sin tarifa confirmada',
     lat: 37.9050, lng: -6.6600,
