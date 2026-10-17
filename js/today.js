@@ -207,8 +207,10 @@ function renderToday() {
 
       <div class="flex flex-col sm:flex-row gap-2">
         <a class="btn btn-primary flex-1 py-3 text-sm" href="${s.gmaps}" target="_blank" rel="noopener">🗺️ Ruta del día en Google Maps</a>
+        ${gmapsAvoidUrl(s) ? `<a class="btn flex-1 py-3 text-sm" href="${gmapsAvoidUrl(s)}" target="_blank" rel="noopener">🚫🛣️ Ruta sin autopistas</a>` : ''}
         ${nightQuery ? `<a class="btn flex-1 py-3 text-sm" href="${mapsDirToName(nightQuery)}" target="_blank" rel="noopener">🏕️ Ir a la pernocta</a>` : ''}
       </div>
+      ${planBHtml(s.day)}
       <p class="text-[11px] t-subtle">“Ir a la pernocta” busca el nombre en Google Maps: comprueba que es el sitio correcto antes de salir. Abre los enlaces desde el móvil para que los envíe a Android Auto.</p>
     </div>
 

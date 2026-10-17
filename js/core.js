@@ -105,3 +105,24 @@ function setActivePill(containerId, attr, value) {
     p.classList.toggle('active', String(p.dataset[attr]) === String(value));
   });
 }
+
+// Enlace de Google Maps por coordenadas pidiendo evitar autopistas (no se genera en el regreso, que es por autovía)
+function gmapsAvoidUrl(stage) {
+  const w = stage.waypoints;
+  if (!w || w.length < 2 || stage.phase === 'regreso') return null;
+  const pt = p => `${p.lat},${p.lng}`;
+  const mids = w.slice(1, -1).map(pt).join('|');
+  return `https://www.google.com/maps/dir/?api=1&travelmode=driving&avoid=highways&origin=${pt(w[0])}&destination=${pt(w[w.length - 1])}` +
+    (mids ? `&waypoints=${encodeURIComponent(mids)}` : '');
+}
+
+function planBHtml(day) {
+  const p = typeof planBData !== 'undefined' ? planBData[day] : null;
+  if (!p) return '';
+  return `<div class="inset p-3 space-y-1.5 text-xs">
+    <div class="font-bold t-main">🛟 Plan B <span class="t-subtle font-normal">(orientativo)</span></div>
+    <div><strong class="t-main">🛏️ Dormir bajo techo:</strong> ${escapeHtml(p.bail)}</div>
+    <div><strong class="t-main">✂️ Recortar:</strong> ${escapeHtml(p.shortcut)}</div>
+    <div><strong class="t-main">🌧️ Mal tiempo:</strong> ${escapeHtml(p.weather)}</div>
+  </div>`;
+}

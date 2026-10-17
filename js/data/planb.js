@@ -1,0 +1,35 @@
+// Plan B por etapa: dónde dormir bajo techo, cómo recortar y qué hacer con lluvia/hielo.
+// Orientativo: nombres de pueblos y vías de enlace a comprobar en Google Maps; no están verificados sobre el terreno.
+
+const planBData = {
+  0: { bail: 'San Pedro Alcántara o Marbella: hostales si llegas tarde o hay niebla en el Puerto del Madroño.',
+       shortcut: 'Alternativa por Ardales (A-357 / A-367) si la costa está atascada: menos curvas buenas, pero sin tráfico urbano.',
+       weather: 'Con lluvia fuerte o niebla, duerme en San Pedro y sube a Ronda por la mañana.' },
+  1: { bail: 'Zahara de la Sierra o Arcos de la Frontera (hostales y casas rurales).',
+       shortcut: 'Salta Arcos: tras Zahara baja a la carretera principal hacia Sevilla y enlaza con la N-433 a Aracena por autovía.',
+       weather: 'Si el Puerto de las Palomas tiene hielo o niebla, no subas: rodea por la carretera principal Ronda–Arcos.' },
+  2: { bail: 'Mértola (guesthouses), Monsaraz o Portalegre. En Marvão hay alojamientos si el camping no abre.',
+       shortcut: 'Omite Monsaraz: de Mértola a Beja y por la IP2 (autovía) hacia Portalegre y Marvão. Ahorras tiempo y pierdes paisaje.',
+       weather: 'La N122 y los pasos canadienses resbalan con lluvia; ganado suelto en la carretera.' },
+  3: { bail: 'Quinta das Cegonhas (camping en Gouveia, ~25 km, a confirmar), Covilhã (hoteles, más baratos y a menor altura) o guesthouse en Manteigas.',
+       shortcut: 'Si la N339 está cerrada: Covilhã ➔ N18 Belmonte ➔ Valhelhas ➔ Manteigas por el valle (comprueba el trazado en Maps).',
+       weather: 'Con nieve o hielo no subas a la Torre. Con niebla densa, visibilidad casi nula en la cumbre.' },
+  4: { bail: 'Vila Real, Vidago o Chaves (hoteles). Si prefieres tienda: Alvão Village Camping (~30 km de Chaves, a confirmar). Hoy anochece a las 16:59.',
+       shortcut: 'Si vas tarde, A24 de Vila Real a Chaves (autovía, aprox. 1 h) y dejas la N222 para otra ocasión.',
+       weather: 'La N222 tiene humedad del río a primera hora: ritmo conservador. Si hay temporal, Régua–Vila Real por la N2/IP3.' },
+  5: { bail: 'Lamego (Camping Lamego), Viseu o Lousã. Si el camping de Góis estuviera cerrado, duerme en Lousã o Góis (alojamiento rural).',
+       shortcut: 'Si vas retrasado, duerme en Viseu (Km 180): dejas 7 sellos y ~105 km para el Día 6.',
+       weather: 'En la Serra do Montemuro hay niebla y firme mojado: no fuerces los 16 sellos si baja la visibilidad.' },
+  6: { bail: 'Abrantes o Ponte de Sor (hoteles) si el Orbitur no te convence con lluvia.',
+       shortcut: 'Avis y Mora (sellos 23–24) son opcionales hoy: se recuperan a primera hora del Día 7.',
+       weather: 'Pinar y alcornocal húmedos: cuidado con hojas y resina en curvas a la sombra.' },
+  7: { bail: 'Pernocta en el camping de Castro Verde (en la N2, a confirmar). Si no admite tienda o está cerrado: alojamiento en Castro Verde o Almodôvar.',
+       shortcut: 'Si la jornada se alarga, para en Castro Verde (Km 655) y haz Almodôvar y el Caldeirão a primera hora.',
+       weather: 'Llanuras con viento lateral: rachas fuertes en rectas. Gasolina: no bajes de medio depósito tras Montemor.' },
+  8: { bail: 'Loulé, São Brás de Alportel o hostal en Faro si hay temporal en la duna. Alternativa: camping de Olhão (a confirmar).',
+       shortcut: 'No hay recorte: las 365 curvas son el objetivo del día. Si llueve mucho, hazlas más tarde con el asfalto seco.',
+       weather: 'Caldeirão mojado: ritmo turístico. La mariscada será el premio igual.' },
+  9: { bail: 'Huelva, Sevilla o Antequera si llegas tarde o con viento.',
+       shortcut: 'La ruta ya es la rápida por autovía. Para alargar con curvas: Sevilla ➔ Ronda ➔ A-397 ➔ Málaga.',
+       weather: 'Viento fuerte en la A-92 con maletas: reduce velocidad y deja distancia.' }
+};

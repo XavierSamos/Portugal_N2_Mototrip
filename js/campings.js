@@ -3,7 +3,7 @@
 let campingFilter = 'all';
 
 const campingStatusInfo = {
-  verified: { label: '✅ Abierto verificado', tag: 'tag-green' },
+  verified: { label: '✅ Abierto según directorio', tag: 'tag-green' },
   check:    { label: '📞 Confirmar apertura', tag: 'tag-amber' },
   closed:   { label: '⛔ Cerrado en diciembre', tag: 'tag-red' }
 };
@@ -24,7 +24,7 @@ function renderCampings() {
   if (!grid) return;
   const list = campingsData
     .filter(c => campingFilter === 'all' || c.status === campingFilter)
-    .sort((a, b) => (a.day - b.day) || (a.pref - b.pref));
+    .sort((a, b) => (a.day - b.day) || ((a.pref || 9) - (b.pref || 9)));
   grid.innerHTML = list.map(c => {
     const st = campingStatusInfo[c.status];
     const pref = c.pref === 1 ? '<span class="tag tag-blue">1ª preferencia</span>' : c.pref === 2 ? '<span class="tag tag-slate">2ª preferencia</span>' : '';
@@ -40,6 +40,7 @@ function renderCampings() {
           <div class="inset p-2.5"><span class="t-subtle block">Precio / noche</span><strong class="t-main">${campingPrice(c)}</strong><span class="t-subtle block text-[10px]">${escapeHtml(c.priceDetail)}</span></div>
         </div>
         <ul class="text-xs t-muted list-disc pl-5 space-y-0.5">${c.features.map(f => `<li>${escapeHtml(f)}</li>`).join('')}</ul>
+        ${c.src ? `<p class="text-[11px] t-subtle"><strong>Fuente:</strong> ${escapeHtml(c.src)}</p>` : ''}
         ${c.note ? `<p class="text-xs t-muted"><strong class="t-main">Nota:</strong> ${escapeHtml(c.note)}</p>` : ''}
         ${c.status !== 'closed' ? `<a class="btn" href="${gmapsPoint(c.lat, c.lng)}" target="_blank" rel="noopener">🗺️ Abrir en Maps</a>` : ''}
       </article>`;

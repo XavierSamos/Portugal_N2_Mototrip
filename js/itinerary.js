@@ -56,6 +56,7 @@ function renderItineraryCards() {
         </div>
         <div class="pt-3 border-t divider flex flex-wrap justify-between items-center gap-2 no-print">
           <a href="${s.gmaps}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="btn btn-primary">🗺️ Ruta en Google Maps</a>
+          ${gmapsAvoidUrl(s) ? `<a href="${gmapsAvoidUrl(s)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="btn" title="Misma ruta pidiendo evitar autopistas">🚫🛣️ Sin autopistas</a>` : ''}
           <div class="flex gap-2">
             <button type="button" class="btn" onclick="event.stopPropagation(); showStageOnMap(${s.day})">📍 En el mapa</button>
             <button type="button" class="btn" onclick="event.stopPropagation(); toggleStageDone(${s.day})" title="Marcar etapa como completada">${doneNow ? '✅' : '☐'}</button>
@@ -87,9 +88,11 @@ function openStageModal(day) {
     <div class="flex flex-wrap gap-2">
       <a href="${s.gmaps}" target="_blank" rel="noopener" class="btn btn-primary flex-1">🗺️ Abrir ruta del Día ${s.day} en Google Maps ➔</a>
       <button class="btn" onclick="closeModal('hourly-modal'); showStageOnMap(${s.day})">📍 Ver en el mapa</button>
+      ${gmapsAvoidUrl(s) ? `<a class="btn" href="${gmapsAvoidUrl(s)}" target="_blank" rel="noopener">🚫🛣️ Sin autopistas</a>` : ''}
     </div>
     <div class="flex flex-wrap gap-1.5"><span class="tag ${ph.tag}">${ph.label}</span><span class="tag tag-slate">${escapeHtml(s.roads)}</span></div>
     ${winter}${alt}${fuel}${time}
+    ${planBHtml(s.day)}
     <div class="inset p-3 flex justify-between gap-2 flex-wrap"><span><strong class="t-main">${s.night.type === 'hotel' ? '🏨' : s.night.type === 'home' ? '🏠' : '⛺'}</strong> ${escapeHtml(s.night.name)}</span><span><strong class="t-main">🍽️</strong> ${escapeHtml(s.lunch)}</span></div>
     ${sights.length || passes.length ? `<div class="flex flex-wrap gap-1.5">
       ${sights.map(sg => `<button class="tag tag-slate" onclick="openSightModal('${sg.id}')">${sg.icon} ${escapeHtml(sg.name)} ➔</button>`).join('')}

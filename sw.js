@@ -4,7 +4,7 @@
 // - Teselas del mapa: caché primero, con límite de tamaño.
 // Sube VERSION al desplegar cambios para forzar la renovación de la caché.
 
-const VERSION = 'v1';
+const VERSION = 'v3';
 const APP_CACHE = `n2-app-${VERSION}`;
 const CDN_CACHE = `n2-cdn-${VERSION}`;
 const TILE_CACHE = 'n2-tiles-v1';
@@ -13,7 +13,7 @@ const MAX_TILES = 2500;
 const APP_SHELL = [
   './', 'index.html', 'manifest.webmanifest', 'css/styles.css',
   'icons/icon-192.png', 'icons/icon-512.png',
-  'js/data/stages.js', 'js/data/stamps.js', 'js/data/sights.js', 'js/data/campings.js', 'js/data/passes.js',
+  'js/data/stages.js', 'js/data/stamps.js', 'js/data/sights.js', 'js/data/campings.js', 'js/data/passes.js', 'js/data/planb.js',
   'js/sun.js', 'js/core.js', 'js/map.js', 'js/itinerary.js', 'js/passport.js', 'js/sights.js',
   'js/campings.js', 'js/passes.js', 'js/budget.js', 'js/packing.js', 'js/today.js', 'js/offline.js', 'js/main.js'
 ];

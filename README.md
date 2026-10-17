@@ -16,3 +16,13 @@ Planificador estático de la expedición en solitario en Honda CRF1100L Africa T
 
 ## Al desplegar cambios
 Sube `VERSION` en `sw.js` para que los móviles renueven la caché.
+
+## Verificación de campings (oct 2026)
+Datos contrastados con directorios (Alan Rogers, camping.info, PiNCAMP, Pitchup, ACSI). Cada ficha indica su fuente. Los directorios se desactualizan: llama antes de salir.
+- Camping Asseiceira (Marvão) figura "enero–octubre": sustituido por Quinta do Pomarinho (a confirmar).
+- Sin camping verificado en Almodôvar (Día 7): reservar alojamiento.
+- Camping de Faro: reabierto en 2021, admite tiendas; fechas de diciembre sin confirmar.
+- Manteigas: sin datos de fechas.
+
+## Plan B y rutas sin autopistas
+Cada etapa tiene su Plan B (`js/data/planb.js`) y un enlace de Google Maps por coordenadas con `avoid=highways`.

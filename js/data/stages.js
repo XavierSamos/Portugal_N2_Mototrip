@@ -87,7 +87,7 @@ const stagesData = [
       { name: 'Portalegre', lat: 39.2930, lng: -7.4310 },
       { name: 'Marvão', lat: 39.3940, lng: -7.3770 }
     ],
-    night: { name: 'Camping Asseiceira (Marvão)', type: 'camping', campingId: 'marvao', lat: 39.3930, lng: -7.3920 },
+    night: { name: 'Quinta do Pomarinho (Castelo de Vide · N246) · confirmar', type: 'camping', campingId: 'pomarinho', lat: 39.4028, lng: -7.4856 },
     maxAlt: 860, altPass: 'Castillo de Marvão (850 m)',
     stamps: 0, timezone: '⏰ Cruce a Portugal: retrasa el reloj 1 h (UTC+0) · Puesta de sol 17:06',
     lunch: 'Mértola: migas alentejanas y carne de porco preto',
@@ -102,8 +102,8 @@ const stagesData = [
       { time: '12:30 - 13:30', act: 'Comida en Monsaraz con vistas al embalse.' },
       { time: '13:30 - 16:00', act: 'Enlace por Elvas y Portalegre (N246) hacia la Serra de São Mamede.' },
       { time: '14:45', act: '⛽ Repostaje de seguridad en Elvas o Portalegre (alerta 180 km desde Mértola).' },
-      { time: '16:15', act: '⛺ Llegada al camping de Marvão y montaje antes de las 16:45 (puesta 17:15).' },
-      { time: '19:00', act: 'Atardecer frío en la muralla y cena en la Taberna del pueblo.' }
+      { time: '16:15', act: '⛺ Llegada a Quinta do Pomarinho (a ~10 km de Marvão; el Camping Asseiceira cierra en invierno) y montaje con luz (anochece a las 17:06).' },
+      { time: '17:00', act: 'Atardecer frío en la muralla de Marvão antes de volver a la tienda.' }
     ],
     sightIds: ['marvao'], passIds: ['n122']
   },
@@ -263,7 +263,7 @@ const stagesData = [
       { name: 'Castro Verde', lat: 37.6980, lng: -8.0860 },
       { name: 'Almodôvar', lat: 37.5110, lng: -8.0600 }
     ],
-    night: { name: 'Alojamiento rural / camping en Almodôvar (a confirmar)', type: 'camping', campingId: 'almodovar', lat: 37.5110, lng: -8.0600 },
+    night: { name: 'Parque de Campismo de Castro Verde (N2) · confirmar', type: 'camping', campingId: 'castro-verde', lat: 37.7045, lng: -8.0879 },
     maxAlt: 450, altPass: null,
     stamps: 8, timezone: 'Portugal (UTC+0) · Puesta de sol 17:14',
     lunch: 'Montemor-o-Novo: açorda alentejana y sericaia de postre',
@@ -277,7 +277,7 @@ const stagesData = [
       { time: '12:15 - 13:15', act: 'Comida en Torrão o Ferreira.' },
       { time: '13:30 - 15:00', act: 'Sellos 29–31: Ferreira do Alentejo (olivo milenario), Aljustrel y Castro Verde. ⛽ Lleno en Castro Verde.' },
       { time: '15:45', act: 'Sello 32: Almodôvar (Bombeiros).' },
-      { time: '16:15', act: '⛺ Llegada al alojamiento de Almodôvar y montaje antes de las 16:45.' },
+      { time: '16:15', act: '⛺ Almodôvar no tiene camping verificado: vuelve ~20 km por la N2 al camping de Castro Verde (confirma antes por teléfono) o consulta el Plan B de hoy. Mañana retomas desde Almodôvar.' },
       { time: '19:30', act: 'Cena: ensopado de borrego. Chequeo de cadena y pastillas antes de las 365 curvas.' }
     ],
     sightIds: [], passIds: []
