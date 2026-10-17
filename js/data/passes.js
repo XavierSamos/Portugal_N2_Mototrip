@@ -1,0 +1,27 @@
+// Tramos míticos de la ruta
+const passesData = [
+  { id: 'a397', name: 'A-397 San Pedro ➔ Ronda', road: 'A-397', day: 0, lengthKm: 45, maxAlt: 1050, curves: '★★★★☆',
+    surface: 'Asfalto excelente, peraltes amplios', winter: 'Niebla frecuente en el Puerto del Madroño al atardecer.',
+    tip: 'Tráfico de furgonetas los viernes por la tarde: adelanta solo en las rectas largas.',
+    lat: 36.6200, lng: -5.0900, gmaps: 'https://www.google.com/maps/dir/San+Pedro+Alcantara/Ronda' },
+  { id: 'palomas', name: 'Puerto de las Palomas', road: 'CA-9104 / A-372', day: 1, lengthKm: 17, maxAlt: 1357, curves: '★★★★★',
+    surface: 'Asfalto bueno, horquillas muy cerradas en la bajada a Zahara', winter: 'Posible hielo en sombras y cierre puntual por nieve.',
+    tip: 'Primera marcha en las horquillas cargado. Modo Gravel si el asfalto está húmedo.',
+    lat: 36.7860, lng: -5.3840, gmaps: 'https://www.google.com/maps/dir/Grazalema/Puerto+de+las+Palomas/Zahara+de+la+Sierra' },
+  { id: 'n122', name: 'N122 Valle del Guadiana', road: 'N122', day: 2, lengthKm: 60, maxAlt: 300, curves: '★★★☆☆',
+    surface: 'Asfalto ondulado con parches', winter: 'Ganado suelto y niebla de valle a primera hora.',
+    tip: 'Ritmo rodador: es un tramo de paisaje, no de curvas. Ojo a los pasos canadienses.',
+    lat: 37.8000, lng: -7.6200, gmaps: 'https://www.google.com/maps/dir/Serpa/Mertola' },
+  { id: 'n338', name: 'N339 / N338 Serra da Estrela', road: 'N339 · N338', day: 3, lengthKm: 45, maxAlt: 1993, curves: '★★★★★',
+    surface: 'Asfalto alpino; gravilla y sal en invierno', winter: 'Cierre frecuente por nieve en diciembre. Consultar estado antes de subir.',
+    tip: 'Plan B por el valle (N18 Belmonte ➔ Valhelhas ➔ Manteigas) si está cerrada.',
+    lat: 40.3500, lng: -7.5800, gmaps: 'https://www.google.com/maps/dir/Covilha/Torre,+Serra+da+Estrela/Manteigas' },
+  { id: 'n222', name: 'N222 Pinhão ➔ Peso da Régua', road: 'N222', day: 4, lengthKm: 27, maxAlt: 150, curves: '★★★★★',
+    surface: 'Asfalto bueno pegado al río', winter: 'Humedad del Duero a primera hora: firme deslizante en sombra.',
+    tip: 'Para en el puente de Pinhão y en Galafura. Mejor con luz de mediodía.',
+    lat: 41.1700, lng: -7.6700, gmaps: 'https://www.google.com/maps/dir/Pinhao/Peso+da+Regua' },
+  { id: 'caldeirao', name: '365 Curvas · Serra do Caldeirão', road: 'N2 (Km 670–730)', day: 8, lengthKm: 60, maxAlt: 580, curves: '★★★★★',
+    surface: 'Asfalto continuo de serpentina', winter: 'Hojas húmedas y musgo en las curvas umbrías.',
+    tip: 'Ciclistas en fin de semana. Disfrútalas: es el último gran tramo del viaje.',
+    lat: 37.3200, lng: -7.9600, gmaps: 'https://www.google.com/maps/dir/Almodovar/Barranco+do+Velho/Sao+Bras+de+Alportel' }
+];

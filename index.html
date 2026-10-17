@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portugal N2 & Iberian Mountain Loops · Africa Twin · Diciembre 2026</title>
+  <meta name="description" content="Planificador de la expedición en solitario Málaga ➔ sierras ➔ Chaves ➔ Estrada Nacional 2 completa ➔ Faro ➔ Málaga en Honda CRF1100L Africa Twin.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="light-theme font-sans antialiased p-3 md:p-8">
+
+  <div class="max-w-7xl mx-auto space-y-5">
+
+    <!-- ===== CABECERA ===== -->
+    <header class="panel p-5 md:p-7 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+      <div class="space-y-1">
+        <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-bold uppercase tracking-wider t-accent">
+          <span>🏍️ Solo · Honda CRF1100L Africa Twin</span><span aria-hidden="true">•</span><span>4–13 Diciembre 2026</span><span aria-hidden="true">•</span><span>⛺ Acampada</span>
+        </div>
+        <h1 class="text-2xl md:text-3xl font-black t-main">Portugal N2 &amp; Iberian Mountain Loops</h1>
+        <p class="text-xs md:text-sm t-muted">Málaga ➔ Ronda ➔ Grazalema ➔ Aracena ➔ Mértola ➔ Monsaraz ➔ Marvão ➔ Serra da Estrela ➔ N222 Duero ➔ Chaves (Km 0) ➔ <strong>EN2 completa</strong> ➔ Faro (Km 738) ➔ Málaga</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="tag tag-blue">9,5 días · 10 etapas</span>
+        <span class="tag tag-green">~2.650 km · 0% autovía a la ida</span>
+        <span class="tag tag-amber" id="header-stamps-badge">🛂 0/35 sellos</span>
+        <button onclick="toggleTheme()" id="theme-toggle-btn" class="btn no-print" aria-label="Cambiar tema">☀️ <span>Modo claro</span></button>
+        <button onclick="window.print()" class="btn no-print" title="Imprimir roadbook para la bolsa sobredepósito">🖨️ <span>Roadbook</span></button>
+      </div>
+    </header>
+
+    <!-- ===== PESTAÑAS ===== -->
+    <nav class="panel p-2 flex items-center gap-1.5 text-xs font-bold overflow-x-auto whitespace-nowrap no-print" role="tablist">
+      <button onclick="switchTab('map')" id="tab-map" class="tab-btn active px-3.5 py-2.5 rounded-xl shrink-0" role="tab">📍 Mapa y Resumen</button>
+      <button onclick="switchTab('itinerary')" id="tab-itinerary" class="tab-btn px-3.5 py-2.5 rounded-xl shrink-0" role="tab">📅 Itinerario</button>
+      <button onclick="switchTab('passport')" id="tab-passport" class="tab-btn px-3.5 py-2.5 rounded-xl shrink-0" role="tab">🛂 Pasaporte N2</button>
+      <button onclick="switchTab('sights')" id="tab-sights" class="tab-btn px-3.5 py-2.5 rounded-xl shrink-0" role="tab">🏛️ Lugares</button>
+      <button onclick="switchTab('budget')" id="tab-budget" class="tab-btn px-3.5 py-2.5 rounded-xl shrink-0" role="tab">💰 Presupuesto</button>
+      <button onclick="switchTab('campings')" id="tab-campings" class="tab-btn px-3.5 py-2.5 rounded-xl shrink-0" role="tab">⛺ Campings</button>
+      <button onclick="switchTab('passes')" id="tab-passes" class="tab-btn px-3.5 py-2.5 rounded-xl shrink-0" role="tab">🏔️ Tramos y Moto</button>
+      <button onclick="switchTab('packing')" id="tab-packing" class="tab-btn px-3.5 py-2.5 rounded-xl shrink-0" role="tab">🧰 Equipaje</button>
+    </nav>
+
+    <!-- ===== TAB 1: MAPA ===== -->
+    <section id="view-map" class="tab-content space-y-5">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div class="lg:col-span-2 panel p-4 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h2 class="font-bold text-lg t-main">📍 Motor cartográfico</h2>
+            <label class="flex items-center gap-2 text-xs t-muted font-semibold cursor-pointer">
+              <input type="checkbox" id="map-show-sights" onchange="renderMapView()"> Mostrar lugares de interés
+            </label>
+          </div>
+
+          <div class="flex flex-wrap gap-1.5" id="map-mode-pills">
+            <button class="pill active" data-mode="full" onclick="setMapMode('full')">🌐 Ruta completa</button>
+            <button class="pill" data-mode="stage" onclick="setMapMode('stage')">📅 Por etapa</button>
+            <button class="pill" data-mode="stamps" onclick="setMapMode('stamps')">📌 Checkpoints N2 (35)</button>
+          </div>
+
+          <div id="map-stage-controls" class="hidden flex flex-wrap items-center gap-2">
+            <label for="map-stage-select" class="text-xs font-bold t-muted">Etapa:</label>
+            <select id="map-stage-select" onchange="setMapStage(Number(this.value))"></select>
+            <button class="btn" onclick="stepMapStage(-1)" aria-label="Etapa anterior">◀</button>
+            <button class="btn" onclick="stepMapStage(1)" aria-label="Etapa siguiente">▶</button>
+            <button class="btn" onclick="openStageModal(currentMapStage)">📋 Cronograma</button>
+          </div>
+
+          <div id="map-stamp-controls" class="hidden flex flex-wrap items-center gap-1.5">
+            <span class="text-xs font-bold t-muted mr-1">Sellos:</span>
+            <button class="pill active" data-sday="all" onclick="setStampDayFilter('all')">Todos (35)</button>
+            <button class="pill" data-sday="5" onclick="setStampDayFilter(5)">Día 5 · 16</button>
+            <button class="pill" data-sday="6" onclick="setStampDayFilter(6)">Día 6 · 8</button>
+            <button class="pill" data-sday="7" onclick="setStampDayFilter(7)">Día 7 · 8</button>
+            <button class="pill" data-sday="8" onclick="setStampDayFilter(8)">Día 8 · 3</button>
+          </div>
+
+          <div id="map" role="application" aria-label="Mapa interactivo de la ruta"></div>
+          <p class="text-[11px] t-subtle">Trazado orientativo por los waypoints de cada etapa. Para navegar usa el enlace de Google Maps de cada día.</p>
+        </div>
+
+        <aside class="space-y-4">
+          <div class="panel p-5 space-y-2" id="map-info"><!-- Injected via JavaScript --></div>
+
+          <div class="panel p-5 space-y-2">
+            <h3 class="font-bold t-main">⚡ Resumen rápido</h3>
+            <ul class="text-xs space-y-1.5 t-muted" id="quick-summary"><!-- Injected via JavaScript --></ul>
+          </div>
+
+          <div class="panel p-5 space-y-3">
+            <h3 class="font-bold t-main">🌤️ Luz y clima en diciembre</h3>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div class="inset p-3"><span class="t-subtle block">Sol en Portugal (UTC+0)</span><strong class="t-main text-sm">07:40 – 17:15</strong><span class="t-amber block text-[11px] font-semibold">Tienda montada 16:45</span></div>
+              <div class="inset p-3"><span class="t-subtle block">Sol en Andalucía (UTC+1)</span><strong class="t-main text-sm">08:15 – 18:05</strong><span class="t-subtle block text-[11px]">+1 h respecto a PT</span></div>
+              <div class="inset p-3"><span class="t-subtle block">Alentejo / Algarve</span><strong class="t-green text-sm">8 °C – 17 °C</strong><span class="t-subtle block text-[11px]">Seco y templado</span></div>
+              <div class="inset p-3"><span class="t-subtle block">Serra da Estrela</span><strong class="t-red text-sm">−4 °C – 6 °C</strong><span class="t-subtle block text-[11px]">Nieve posible</span></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===== TAB 2: ITINERARIO ===== -->
+    <section id="view-itinerary" class="tab-content hidden space-y-5">
+      <div class="panel p-5 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="font-bold text-lg t-main">📅 Cronograma maestro · 10 etapas</h2>
+            <p class="text-xs t-muted">Cada jornada calculada para montar la tienda antes de las 16:45 (sol hasta las 17:15 en Portugal).</p>
+          </div>
+          <div class="flex flex-wrap gap-1.5" id="itinerary-filters">
+            <button class="pill active" data-phase="all" onclick="filterItinerary('all')">Todas</button>
+            <button class="pill" data-phase="sierras" onclick="filterItinerary('sierras')">🟢 Fase 1 · Sierras</button>
+            <button class="pill" data-phase="n2" onclick="filterItinerary('n2')">🔵 Fase 2 · N2</button>
+            <button class="pill" data-phase="regreso" onclick="filterItinerary('regreso')">🟠 Fase 3 · Regreso</button>
+          </div>
+        </div>
+        <div id="itinerary-cards" class="grid grid-cols-1 md:grid-cols-2 gap-4"><!-- Injected via JavaScript --></div>
+      </div>
+    </section>
+
+    <!-- ===== TAB 3: PASAPORTE ===== -->
+    <section id="view-passport" class="tab-content hidden space-y-5">
+      <div class="panel p-5 space-y-4">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 class="font-bold text-lg t-main">🛂 Pasaporte de la Estrada Nacional 2</h2>
+            <p class="text-xs t-muted">Colecciona los 35 sellos para obtener el <strong>Diploma Oficial de Conclusão da EN2</strong>. Toca un municipio para marcarlo; se guarda en este navegador.</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button class="btn" onclick="switchTab('map'); setMapMode('stamps')">🗺️ Ver en el mapa</button>
+            <button class="btn" onclick="resetStamps()">↺ Reiniciar sellos</button>
+          </div>
+        </div>
+        <div class="inset p-4 space-y-2">
+          <div class="flex justify-between text-sm font-bold t-main"><span id="passport-progress-text">0 de 35 sellos</span><span id="passport-progress-pct">0%</span></div>
+          <div class="progress"><div id="passport-progress-bar" style="width:0%"></div></div>
+          <div id="passport-day-progress" class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-1"><!-- Injected via JavaScript --></div>
+          <div id="passport-diploma" class="hidden alert alert-green"><strong>🎓 ¡35/35! Diploma desbloqueado.</strong> Recógelo en el Templo N2 junto al Marco Km 738 o en el Posto de Turismo de Faro.</div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="passport-offices"><!-- Injected via JavaScript --></div>
+      </div>
+      <div id="passport-groups" class="space-y-5"><!-- Injected via JavaScript --></div>
+    </section>
+
+    <!-- ===== TAB 4: LUGARES ===== -->
+    <section id="view-sights" class="tab-content hidden space-y-5">
+      <div class="panel p-5 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="font-bold text-lg t-main">🏛️ Lugares de interés y paradas paisajísticas</h2>
+            <p class="text-xs t-muted">12 paradas imprescindibles con consejos de acceso para la Africa Twin.</p>
+          </div>
+          <input type="search" id="sights-search" placeholder="Buscar lugar…" oninput="renderSights()" class="w-full sm:w-56" aria-label="Buscar lugar">
+        </div>
+        <div class="flex flex-wrap gap-1.5" id="sights-filters"><!-- Injected via JavaScript --></div>
+        <div id="sights-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"><!-- Injected via JavaScript --></div>
+      </div>
+    </section>
+
+    <!-- ===== TAB 5: PRESUPUESTO ===== -->
+    <section id="view-budget" class="tab-content hidden space-y-5">
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-5">
+        <div class="lg:col-span-3 panel p-5 space-y-5">
+          <div>
+            <h2 class="font-bold text-lg t-main">💰 Calculadora de presupuesto · Solo + Africa Twin</h2>
+            <p class="text-xs t-muted">Mueve los sliders: el total se recalcula al instante.</p>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-xs font-bold t-main"><label for="b-consumption">⛽ Consumo medio</label><span id="b-consumption-label" class="t-accent"></span></div>
+            <input type="range" id="b-consumption" min="4.5" max="12" step="0.1" value="9.0" oninput="updateBudget()">
+            <div class="flex justify-between text-[10px] t-subtle"><span>4,5</span><span>Africa Twin cargada en montaña ≈ 9,0</span><span>12,0 L/100 km</span></div>
+          </div>
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-xs font-bold t-main"><label for="b-fuel-price">💶 Precio medio gasolina 95/98</label><span id="b-fuel-price-label" class="t-accent"></span></div>
+            <input type="range" id="b-fuel-price" min="1.40" max="2.20" step="0.01" value="1.90" oninput="updateBudget()">
+            <div class="flex justify-between text-[10px] t-subtle"><span>1,40 €</span><span>2,20 €/L</span></div>
+          </div>
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-xs font-bold t-main"><label for="b-km">🛣️ Kilómetros totales</label><span id="b-km-label" class="t-accent"></span></div>
+            <input type="range" id="b-km" min="2400" max="3200" step="50" value="2650" oninput="updateBudget()">
+            <div class="flex justify-between text-[10px] t-subtle"><span>2.400</span><span id="b-km-hint"></span><span>3.200 km</span></div>
+          </div>
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-xs font-bold t-main"><label for="b-camping">⛺ Precio medio noche de camping</label><span id="b-camping-label" class="t-accent"></span></div>
+            <input type="range" id="b-camping" min="8" max="25" step="1" value="15" oninput="updateBudget()">
+            <div class="flex justify-between text-[10px] t-subtle"><span>8 €</span><span>8 noches · parcela con moto y tienda</span><span>25 €</span></div>
+          </div>
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-xs font-bold t-main"><label for="b-food">🍽️ Alimentación diaria</label><span id="b-food-label" class="t-accent"></span></div>
+            <input type="range" id="b-food" min="15" max="50" step="1" value="28" oninput="updateBudget()">
+            <div class="flex justify-between text-[10px] t-subtle"><span>15 €</span><span>× 9,5 días</span><span>50 €/día</span></div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <label class="inset p-3 text-xs space-y-1 block">
+              <span class="font-bold t-main block">🛣️ Peajes EasyToll</span>
+              <span class="flex items-center gap-1"><input type="number" id="b-tolls" min="0" step="1" value="25" oninput="updateBudget()" class="w-20"> €</span>
+              <span class="t-subtle text-[10px] block">Ex-SCUT con lectura de matrícula</span>
+            </label>
+            <label class="inset p-3 text-xs space-y-1 block">
+              <span class="font-bold t-main block">🔧 Lubricante y lavados</span>
+              <span class="flex items-center gap-1"><input type="number" id="b-maint" min="0" step="1" value="20" oninput="updateBudget()" class="w-20"> €</span>
+              <span class="t-subtle text-[10px] block">Spray cadena, lavado a presión</span>
+            </label>
+            <label class="inset p-3 text-xs space-y-1 block">
+              <span class="font-bold t-main block">🏨 Noche hotel Chaves</span>
+              <span class="flex items-center gap-1"><input type="number" id="b-hotel" min="0" step="1" value="45" oninput="updateBudget()" class="w-20"> €</span>
+              <span class="t-subtle text-[10px] block">Camping de Chaves cerrado</span>
+            </label>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button class="btn" onclick="resetBudget()">↺ Valores por defecto</button>
+            <button class="btn" id="btn-share" onclick="copyBudgetSummary()">💬 Copiar resumen para WhatsApp</button>
+          </div>
+        </div>
+
+        <div class="lg:col-span-2 space-y-4">
+          <div class="panel p-5 space-y-1" style="border-color: var(--accent); border-width: 2px;">
+            <span class="text-xs font-bold uppercase tracking-wider t-subtle">Coste total de la expedición</span>
+            <div id="b-total" class="text-4xl font-black t-main">—</div>
+            <div class="text-xs t-muted">Coste por km: <strong id="b-per-km" class="t-main"></strong> · por día: <strong id="b-per-day" class="t-main"></strong></div>
+          </div>
+          <div class="panel p-5 space-y-3">
+            <h3 class="font-bold t-main text-sm">📊 Desglose</h3>
+            <div class="stackbar" role="img" aria-label="Distribución del presupuesto">
+              <div id="bar-fuel" style="background:#2563eb"></div>
+              <div id="bar-lodging" style="background:#059669"></div>
+              <div id="bar-food" style="background:#d97706"></div>
+              <div id="bar-tolls" style="background:#7c3aed"></div>
+            </div>
+            <ul class="text-xs space-y-2.5">
+              <li class="flex justify-between gap-2"><span class="t-muted"><b class="inline-block w-2.5 h-2.5 rounded-full mr-1.5" style="background:#2563eb"></b>⛽ Combustible <span id="b-fuel-detail" class="t-subtle block text-[11px] ml-4"></span></span><strong id="b-fuel" class="t-main font-mono whitespace-nowrap"></strong></li>
+              <li class="flex justify-between gap-2"><span class="t-muted"><b class="inline-block w-2.5 h-2.5 rounded-full mr-1.5" style="background:#059669"></b>⛺ Alojamiento <span id="b-lodging-detail" class="t-subtle block text-[11px] ml-4"></span></span><strong id="b-lodging" class="t-main font-mono whitespace-nowrap"></strong></li>
+              <li class="flex justify-between gap-2"><span class="t-muted"><b class="inline-block w-2.5 h-2.5 rounded-full mr-1.5" style="background:#d97706"></b>🍽️ Manutención <span id="b-food-detail" class="t-subtle block text-[11px] ml-4"></span></span><strong id="b-food-total" class="t-main font-mono whitespace-nowrap"></strong></li>
+              <li class="flex justify-between gap-2"><span class="t-muted"><b class="inline-block w-2.5 h-2.5 rounded-full mr-1.5" style="background:#7c3aed"></b>🛣️ Peajes y mantenimiento <span id="b-tolls-detail" class="t-subtle block text-[11px] ml-4"></span></span><strong id="b-tolls-total" class="t-main font-mono whitespace-nowrap"></strong></li>
+            </ul>
+          </div>
+          <div class="alert alert-blue"><strong>Peajes electrónicos:</strong> las ex-SCUT (como la A22 del Algarve) no tienen cabinas. Al entrar por Vila Real de Santo António puedes asociar la tarjeta a la matrícula en el punto EasyToll de la frontera, o usar Toll Card. La ruta por secundarias apenas los usa: el importe cubre enlaces opcionales y la vuelta.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TAB 6: CAMPINGS ===== -->
+    <section id="view-campings" class="tab-content hidden space-y-5">
+      <div class="panel p-5 space-y-4">
+        <div>
+          <h2 class="font-bold text-lg t-main">⛺ Campings de invierno</h2>
+          <p class="text-xs t-muted">Por orden de preferencia. Los marcados “confirmar” no tienen apertura invernal verificada: llama antes de salir.</p>
+        </div>
+        <div class="alert alert-red"><strong>⚠️ Alerta Chaves:</strong> el Camping Quinta do Rebentão (Chaves) <strong>CIERRA todo diciembre</strong>. La noche del Día 4 es en hotel / residencial.</div>
+        <div class="flex flex-wrap gap-1.5" id="camping-filters">
+          <button class="pill active" data-cf="all" onclick="filterCampings('all')">Todos</button>
+          <button class="pill" data-cf="verified" onclick="filterCampings('verified')">✅ Verificados</button>
+          <button class="pill" data-cf="check" onclick="filterCampings('check')">📞 Confirmar</button>
+        </div>
+        <div id="campings-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"><!-- Injected via JavaScript --></div>
+      </div>
+      <div class="panel p-5 space-y-3">
+        <h3 class="font-bold t-main">🌙 Plan de pernoctas noche a noche</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs">
+            <thead><tr class="t-subtle text-left border-b divider"><th class="py-2 pr-3">Noche</th><th class="py-2 pr-3">Lugar</th><th class="py-2 pr-3">Tipo</th><th class="py-2">Estado</th></tr></thead>
+            <tbody id="nights-table" class="t-muted"><!-- Injected via JavaScript --></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TAB 7: TRAMOS Y MOTO ===== -->
+    <section id="view-passes" class="tab-content hidden space-y-5">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div class="panel p-5 space-y-3">
+          <h2 class="font-bold text-lg t-main">🏍️ Honda CRF1100L Africa Twin</h2>
+          <ul class="text-xs space-y-2 t-muted">
+            <li class="flex justify-between gap-2 border-b divider pb-1.5"><span>Depósito</span><strong class="t-main text-right">18,8 L (24,8 L Adventure Sports)</strong></li>
+            <li class="flex justify-between gap-2 border-b divider pb-1.5"><span>Consumo real de viaje</span><strong class="t-main">9,0 L/100 km</strong></li>
+            <li class="flex justify-between gap-2 border-b divider pb-1.5"><span>Autonomía segura</span><strong class="t-main">~200 – 275 km</strong></li>
+            <li class="flex justify-between gap-2 border-b divider pb-1.5"><span>Alerta de repostaje</span><strong class="t-red">cada 180 km</strong></li>
+            <li class="flex justify-between gap-2 border-b divider pb-1.5"><span>Ruedas</span><strong class="t-main">21" / 18" tubeless</strong></li>
+            <li class="flex justify-between gap-2 border-b divider pb-1.5"><span>Suspensión</span><strong class="t-main">230 / 220 mm</strong></li>
+            <li class="flex justify-between gap-2"><span>Modos</span><strong class="t-main text-right">Tour en enlace · Gravel en mojado y puertos</strong></li>
+          </ul>
+          <div class="alert alert-amber"><strong>Kit bajo el asiento:</strong> antipinchazos tubeless + mini-compresor 12V. Spray de teflón en la cadena cada día tras rodar en mojado.</div>
+          <div class="inset p-3 space-y-2">
+            <div class="flex justify-between text-xs font-bold t-main"><label for="range-consumption">Autonomía con depósito de</label>
+              <select id="range-tank" onchange="renderRangePlanner()"><option value="18.8">18,8 L</option><option value="24.8">24,8 L (AS)</option></select></div>
+            <input type="range" id="range-consumption" min="4.5" max="12" step="0.1" value="9.0" oninput="renderRangePlanner()">
+            <div class="text-xs t-muted"><span id="range-consumption-label"></span> ➔ autonomía total <strong class="t-main" id="range-total"></strong> · con 15% de reserva <strong class="t-main" id="range-safe"></strong></div>
+          </div>
+        </div>
+        <div class="lg:col-span-2 panel p-5 space-y-3">
+          <h3 class="font-bold t-main">⛽ Repostajes por etapa (alerta cada 180 km)</h3>
+          <div id="range-table" class="space-y-2"><!-- Injected via JavaScript --></div>
+        </div>
+      </div>
+      <div class="panel p-5 space-y-4">
+        <div>
+          <h2 class="font-bold text-lg t-main">🏔️ Tramos míticos</h2>
+          <p class="text-xs t-muted">Las carreteras por las que merece la pena el viaje. Marca tus favoritas con ⭐.</p>
+        </div>
+        <div id="passes-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"><!-- Injected via JavaScript --></div>
+      </div>
+    </section>
+
+    <!-- ===== TAB 8: EQUIPAJE ===== -->
+    <section id="view-packing" class="tab-content hidden space-y-5">
+      <div class="panel p-5 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="font-bold text-lg t-main">🧰 Equipaje de moto y acampada invernal</h2>
+            <p class="text-xs t-muted">Se guarda automáticamente en este navegador.</p>
+          </div>
+          <button class="btn" onclick="resetPacking()">↺ Desmarcar todo</button>
+        </div>
+        <div class="inset p-4 space-y-2">
+          <div class="flex justify-between text-sm font-bold t-main"><span id="packing-progress-text">0 de 0</span><span id="packing-progress-pct">0%</span></div>
+          <div class="progress"><div id="packing-progress-bar" style="width:0%"></div></div>
+        </div>
+        <div id="packing-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"><!-- Injected via JavaScript --></div>
+      </div>
+      <div class="panel p-5 space-y-2">
+        <h3 class="font-bold t-main">🚨 Emergencias y normas en Portugal</h3>
+        <ul class="text-xs t-muted space-y-1.5 list-disc pl-5">
+          <li><strong class="t-main">112</strong> emergencias (Portugal y España) · GNR tráfico en carretera, PSP en ciudades.</li>
+          <li>Límites moto: 50 urbano · 90 carretera · 100 vía rápida · 120 autopista. Luces de cruce siempre encendidas.</li>
+          <li>Obligatorio llevar: DNI, permiso, documentación de la moto y seguro (carta verde no necesaria en la UE).</li>
+          <li>Tasa de alcohol: 0,5 g/l (0,2 g/l con menos de 3 años de carnet). Multas al momento.</li>
+          <li>Gasolineras escasas en el Baixo Alentejo y la Serra do Caldeirão: no bajes de medio depósito tras Montemor-o-Novo.</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer class="text-center text-[11px] t-subtle pb-4 no-print">Portugal N2 Mototrip · Datos orientativos: confirma horarios de sellado y aperturas de camping antes de salir.</footer>
+  </div>
+
+  <!-- ===== MODAL ETAPA ===== -->
+  <div id="hourly-modal" class="modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-[1000] hidden" onclick="if(event.target === this) closeModal('hourly-modal')" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="panel max-w-2xl w-full max-h-[88vh] overflow-y-auto p-6 space-y-4">
+      <div class="flex justify-between items-start gap-3">
+        <div>
+          <div id="modal-day-badge" class="text-[11px] font-bold t-accent uppercase tracking-wider"></div>
+          <h3 id="modal-title" class="text-lg font-bold t-main mt-1"></h3>
+        </div>
+        <button onclick="closeModal('hourly-modal')" class="btn btn-ghost" aria-label="Cerrar">✕</button>
+      </div>
+      <div id="modal-body" class="space-y-3 text-xs t-muted"></div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL DETALLE (lugares) ===== -->
+  <div id="detail-modal" class="modal-backdrop fixed inset-0 flex items-center justify-center p-4 z-[1100] hidden" onclick="if(event.target === this) closeModal('detail-modal')" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+    <div class="panel max-w-xl w-full max-h-[85vh] overflow-y-auto p-6 space-y-4">
+      <div class="flex justify-between items-start gap-3">
+        <div>
+          <div id="detail-badges" class="flex flex-wrap gap-1.5"></div>
+          <h3 id="detail-title" class="text-lg font-bold t-main mt-2"></h3>
+        </div>
+        <button onclick="closeModal('detail-modal')" class="btn btn-ghost" aria-label="Cerrar">✕</button>
+      </div>
+      <div id="detail-body" class="space-y-3 text-xs t-muted"></div>
+    </div>
+  </div>
+
+  <!-- Datos -->
+  <script src="js/data/stages.js"></script>
+  <script src="js/data/stamps.js"></script>
+  <script src="js/data/sights.js"></script>
+  <script src="js/data/campings.js"></script>
+  <script src="js/data/passes.js"></script>
+  <!-- Lógica -->
+  <script src="js/core.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/itinerary.js"></script>
+  <script src="js/passport.js"></script>
+  <script src="js/sights.js"></script>
+  <script src="js/campings.js"></script>
+  <script src="js/passes.js"></script>
+  <script src="js/budget.js"></script>
+  <script src="js/packing.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
